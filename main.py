@@ -1,53 +1,80 @@
-#### Imports et définition des variables globales
+"""
+Module d'encodage ASCII Art basé sur un codage par tuples (caractère, occurrences).
+"""
 
 # Mandatory for the recursive solution to work on large inputs
 import sys
 sys.setrecursionlimit(2000)
 
 
-#### Fonctions secondaires
-
-
 def artcode_i(s):
-    """retourne la liste de tuples encodant une chaîne de caractères passée en argument selon un algorithme itératif
+    """
+    Retourne la liste de tuples encodant une chaîne de caractères
+    selon un algorithme itératif.
 
     Args:
-        s (str): la chaîne de caractères à encoder
+        s (str): chaîne à encoder
 
     Returns:
-        list: la liste des tuples (caractère, nombre d'occurences)
+        list: liste de tuples (caractère, occurrences)
     """
-    
-    # votre code ici
+    if not s:
+        return []
 
-    return [ ]
+    caracteres = [s[0]]
+    occurences = [1]
+
+    k = 1
+    longueur = len(s)
+
+    while k < longueur:
+        if s[k] == s[k - 1]:
+            occurences[-1] += 1
+        else:
+            caracteres.append(s[k])
+            occurences.append(1)
+        k += 1
+
+    return list(zip(caracteres, occurences))
 
 
 def artcode_r(s):
-    """retourne la liste de tuples encodant une chaîne de caractères passée en argument selon un algorithme récursif
+    """
+    Retourne la liste de tuples encodant une chaîne de caractères
+    selon un algorithme récursif.
 
     Args:
-        s (str): la chaîne de caractères à encoder
+        s (str): chaîne à encoder
 
     Returns:
-        list: la liste des tuples (caractère, nombre d'occurences)
+        list: liste de tuples (caractère, occurrences)
     """
-    
-    # votre code ici
+    if not s:
+        return []
+    if len(s) == 1:
+        return [(s[0], 1)]
 
-    # cas de base
-    # recherche nombre de caractères identiques au premier
-    # appel récursif
+    premier = s[0]
+    compteur = 1
+    indice = 1
+    longueur = len(s)
 
-    return []
-    
+    while indice < longueur and s[indice] == premier:
+        compteur += 1
+        indice += 1
 
-#### Fonction principale
+    reste = s[indice:]
+    return [(premier, compteur)] + artcode_r(reste)
 
 
 def main():
-    print(artcode_i('MMMMaaacXolloMM'))
-    print(artcode_r('MMMMaaacXolloMM'))
+    """
+    Fonction principale permettant de tester les fonctions d'encodage.
+    """
+    chaine = 'MMMMaaacXolloMM'
+    print(artcode_i(chaine))
+    print(artcode_r(chaine))
+
 
 if __name__ == "__main__":
     main()
